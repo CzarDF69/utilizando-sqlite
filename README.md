@@ -8,6 +8,9 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 
    ```bash
    npm install
+   npm i @react-native-picker/picker
+   npm install @react-navigation/native @react-navigation/stack
+   npx expo install expo-sqlite
    ```
 
 2. Start the app
