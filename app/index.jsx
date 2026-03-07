@@ -15,10 +15,10 @@ export default function App() {
 
   useEffect(() => {
     criarTabela();
-    mostraNotas();
+    mostrarNotas();
   }, []);
 
-  async function mostraNotas() {
+  async function mostrarNotas() {
     const todasNotas = await listarNotas();
     setNotas(todasNotas);
     console.log(todasNotas);
@@ -27,7 +27,7 @@ export default function App() {
   async function filtrarLista(categoriaSelecionada) {
     setCategoria(categoriaSelecionada);
     if (categoriaSelecionada === "Todos") {
-      await mostraNotas();
+      await mostrarNotas();
     } else {
       setNotas(await filtrarPorCategoria(categoriaSelecionada));
     };
@@ -52,7 +52,7 @@ export default function App() {
               </View>
             )
           }} />
-        <NotaEditor mostraNotas={mostraNotas} notaSelecionada={notaSelecionada} />
+        <NotaEditor mostrarNotas={mostrarNotas} notaSelecionada={notaSelecionada} setNotaSelecionada={setNotaSelecionada} />
         <StatusBar />
       </SafeAreaView>
     </SafeAreaProvider>

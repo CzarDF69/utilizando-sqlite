@@ -4,7 +4,7 @@ import { Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View 
 
 import { alterarNota, excluirNota, inserirNota } from "../servicos/SQLite";
 
-export default function NotaEditor({ listarNotas, notaSelecionada, setNotaSelecionada }) {
+export default function NotaEditor({ mostrarNotas, notaSelecionada, setNotaSelecionada }) {
 
   useEffect(() => {
     if (notaSelecionada.id) {
@@ -31,7 +31,7 @@ export default function NotaEditor({ listarNotas, notaSelecionada, setNotaSeleci
       texto: texto,
     }
     await inserirNota(umaNota)
-    await listarNotas()
+    mostrarNotas()
     limpaModal()
   }
 
@@ -43,13 +43,13 @@ export default function NotaEditor({ listarNotas, notaSelecionada, setNotaSeleci
       id: notaSelecionada.id,
     }
     await alterarNota(umaNota)
-    await listarNotas()
+    mostrarNotas()
     limpaModal()
   }
 
   const deletarNota = async () => {
     await excluirNota(notaSelecionada.id)
-    await listarNotas()
+    mostrarNotas()
     limpaModal()
   }
 
@@ -100,17 +100,17 @@ export default function NotaEditor({ listarNotas, notaSelecionada, setNotaSeleci
               <View style={estilos.modalBotoes}>
                 <TouchableOpacity
                   style={estilos.modalBotaoSalvar}
-                  onPress={ notaEditada ? editarNota() : salvarNota() }>
+                  onPress={() => notaEditada ? editarNota() : salvarNota()}>
                   <Text style={estilos.modalBotaoTexto}>Salvar</Text>
                 </TouchableOpacity>
                 {notaEditada ?
                   <TouchableOpacity
                     style={estilos.modalBotaoDeletar}
-                    onPress={ deletarNota() }>
+                    onPress={() => deletarNota()}>
                     <Text style={estilos.modalBotaoTexto}>Excluir</Text>
                   </TouchableOpacity> : null
                 }
-                <TouchableOpacity style={estilos.modalBotaoCancelar} onPress={() => { limpaModal() }}>
+                <TouchableOpacity style={estilos.modalBotaoCancelar} onPress={() => limpaModal()}>
                   <Text style={estilos.modalBotaoTexto}>Cancelar</Text>
                 </TouchableOpacity>
               </View>
@@ -118,7 +118,7 @@ export default function NotaEditor({ listarNotas, notaSelecionada, setNotaSeleci
           </ScrollView>
         </View>
       </Modal>
-      <TouchableOpacity onPress={() => { setModalVisivel(true) }} style={estilos.adicionarMemo}>
+      <TouchableOpacity onPress={() => {setModalVisivel(true)}} style={estilos.adicionarMemo}>
         <Text style={estilos.adicionarMemoTexto}>+</Text>
       </TouchableOpacity>
     </>

@@ -3,7 +3,7 @@ import * as SQLite from "expo-sqlite";
 const dbName = "notas.db";
 let database;
 
-export async function abrirConexao() {
+async function abrirConexao() {
   if(!database) {
     database = await SQLite.openDatabaseAsync(dbName);
   }
