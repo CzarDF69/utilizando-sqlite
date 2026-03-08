@@ -1,41 +1,51 @@
 import { Picker } from "@react-native-picker/picker";
+import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
 import { FlatList, StatusBar, StyleSheet, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
-import { Nota } from "../src/componentes/Nota";
-import NotaEditor from "../src/componentes/NotaEditor";
-import { criarTabela, filtrarPorCategoria, listarNotas } from "../src/servicos/SQLite";
+import { Nota } from "../componentes/Nota";
+import NotaEditor from "../componentes/NotaEditor";
 
 export default function App() {
 
+  const db = useSQLiteContext();
   const [notaSelecionada, setNotaSelecionada] = useState({});
   const [notas, setNotas] = useState([]);
   const [categoria, setCategoria] = useState("Todos");
 
   useEffect(() => {
-    criarTabela();
     mostrarNotas();
   }, []);
 
-  async function mostrarNotas() {
-    const todasNotas = await listarNotas();
-    setNotas(todasNotas);
-    console.log(todasNotas);
+  const mostrarNotas = async () => {
+    try {
+      const todasNotas = await db.getAllAsync(` SELECT * FROM notas `);
+      setNotas(todasNotas);
+      console.log(todasNotas);
+    } catch (error) {
+      console.error("Erro ao buscar notas:", error);
+    };
   };
 
-  async function filtrarLista(categoriaSelecionada) {
+  const filtrarLista = async (categoriaSelecionada) => {
     setCategoria(categoriaSelecionada);
     if (categoriaSelecionada === "Todos") {
       await mostrarNotas();
     } else {
-      setNotas(await filtrarPorCategoria(categoriaSelecionada));
+      try {
+        const todasNotas = await db.getAllAsync(` SELECT * FROM notas WHERE categoria = ? `, [categoriaSelecionada]);
+        setNotas(todasNotas);
+      } catch (error) {
+        console.error("Erro ao filtrar notas:", error);
+      }
     };
   };
 
   return (
     <SafeAreaProvider>
       <SafeAreaView style={estilos.container}>
+
         <FlatList
           data={notas}
           renderItem={(nota) => <Nota {...nota} setNotaSelecionada={setNotaSelecionada} />}

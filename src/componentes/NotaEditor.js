@@ -1,39 +1,45 @@
 import { Picker } from "@react-native-picker/picker";
+import { useSQLiteContext } from 'expo-sqlite';
 import React, { useEffect, useState } from "react";
 import { Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
-import { alterarNota, excluirNota, inserirNota } from "../servicos/SQLite";
-
 export default function NotaEditor({ mostrarNotas, notaSelecionada, setNotaSelecionada }) {
+
+  const db = useSQLiteContext();
+  const [titulo, setTitulo] = useState(notaSelecionada.titulo || "");
+  const [categoria, setCategoria] = useState(notaSelecionada.categoria || "Pessoal");
+  const [texto, setTexto] = useState(notaSelecionada.texto || "");
+  const [modalVisivel, setModalVisivel] = useState(false);
+  const [notaEditada, setNotaEditada] = useState(false);
 
   useEffect(() => {
     if (notaSelecionada.id) {
-      setTitulo(notaSelecionada.titulo)
-      setCategoria(notaSelecionada.categoria)
-      setTexto(notaSelecionada.texto)
-      setModalVisivel(true)
-      setNotaEditada(true)
-      return
-    }
-    setNotaEditada(false)
-  }, [notaSelecionada])
-
-  const [titulo, setTitulo] = useState(notaSelecionada.titulo || "")
-  const [categoria, setCategoria] = useState(notaSelecionada.categoria || "Pessoal")
-  const [texto, setTexto] = useState(notaSelecionada.texto || "")
-  const [modalVisivel, setModalVisivel] = useState(false)
-  const [notaEditada, setNotaEditada] = useState(false)
+      setTitulo(notaSelecionada.titulo);
+      setCategoria(notaSelecionada.categoria);
+      setTexto(notaSelecionada.texto);
+      setModalVisivel(true);
+      setNotaEditada(true);
+      return;
+    };
+    setNotaEditada(false);
+  }, [notaSelecionada]);
 
   const salvarNota = async () => {
     const umaNota = {
       titulo: titulo,
       categoria: categoria,
       texto: texto,
-    }
-    await inserirNota(umaNota)
-    mostrarNotas()
-    limpaModal()
-  }
+    };
+    try {
+      await db.runAsync(`
+        INSERT INTO notas (titulo, categoria, texto) VALUES (?, ?, ?)
+      `, [umaNota.titulo, umaNota.categoria, umaNota.texto]);
+      mostrarNotas();
+      limpaModal();
+    } catch (error) {
+      console.error("Erro ao salvar nota:", error);
+    };
+  };
 
   const editarNota = async () => {
     const umaNota = {
@@ -41,25 +47,37 @@ export default function NotaEditor({ mostrarNotas, notaSelecionada, setNotaSelec
       categoria: categoria,
       texto: texto,
       id: notaSelecionada.id,
-    }
-    await alterarNota(umaNota)
-    mostrarNotas()
-    limpaModal()
-  }
+    };
+    try {
+      await db.runAsync(`
+        UPDATE notas SET titulo = ?, categoria = ?, texto = ? WHERE id = ?
+      `, [umaNota.titulo, umaNota.categoria, umaNota.texto, umaNota.id]);
+      mostrarNotas();
+      limpaModal();
+    } catch (error) {
+      console.error("Erro ao editar nota:", error);
+    };
+  };
 
   const deletarNota = async () => {
-    await excluirNota(notaSelecionada.id)
-    mostrarNotas()
-    limpaModal()
-  }
+    try {
+      await db.runAsync(`
+        DELETE FROM notas WHERE id = ?
+      `, [notaSelecionada.id]);
+      mostrarNotas();
+      limpaModal();
+    } catch (error) {
+      console.error("Erro ao excluir nota:", error);
+    };
+  };
 
   const limpaModal = () => {
-    setTitulo("")
-    setCategoria("Pessoal")
-    setTexto("")
-    setNotaSelecionada({})
-    setModalVisivel(false)
-  }
+    setTitulo("");
+    setCategoria("Pessoal");
+    setTexto("");
+    setNotaSelecionada({});
+    setModalVisivel(false);
+  };
 
   return (
     <>
@@ -118,7 +136,7 @@ export default function NotaEditor({ mostrarNotas, notaSelecionada, setNotaSelec
           </ScrollView>
         </View>
       </Modal>
-      <TouchableOpacity onPress={() => {setModalVisivel(true)}} style={estilos.adicionarMemo}>
+      <TouchableOpacity onPress={() => { setModalVisivel(true) }} style={estilos.adicionarMemo}>
         <Text style={estilos.adicionarMemoTexto}>+</Text>
       </TouchableOpacity>
     </>
