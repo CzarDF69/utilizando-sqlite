@@ -8,7 +8,7 @@ export default function NotaEditor({ mostrarNotas, notaSelecionada, setNotaSelec
   const db = useSQLiteContext();
   const [titulo, setTitulo] = useState(notaSelecionada.titulo || "");
   const [categoria, setCategoria] = useState(notaSelecionada.categoria || "Pessoal");
-  const [texto, setTexto] = useState(notaSelecionada.texto || "");
+  const [descricao, setDescricao] = useState(notaSelecionada.texto || "");
   const [modalVisivel, setModalVisivel] = useState(false);
   const [notaEditada, setNotaEditada] = useState(false);
 
@@ -16,7 +16,7 @@ export default function NotaEditor({ mostrarNotas, notaSelecionada, setNotaSelec
     if (notaSelecionada.id) {
       setTitulo(notaSelecionada.titulo);
       setCategoria(notaSelecionada.categoria);
-      setTexto(notaSelecionada.texto);
+      setDescricao(notaSelecionada.descricao);
       setModalVisivel(true);
       setNotaEditada(true);
       return;
@@ -28,12 +28,12 @@ export default function NotaEditor({ mostrarNotas, notaSelecionada, setNotaSelec
     const umaNota = {
       titulo: titulo,
       categoria: categoria,
-      texto: texto,
+      descricao: descricao,
     };
     try {
-      await db.runAsync(`
-        INSERT INTO notas (titulo, categoria, texto) VALUES (?, ?, ?)
-      `, [umaNota.titulo, umaNota.categoria, umaNota.texto]);
+      await db.runAsync(
+        ` INSERT INTO notas (titulo, categoria, descricao) VALUES (?, ?, ?); `,
+        [umaNota.titulo, umaNota.categoria, umaNota.descricao]);
       mostrarNotas();
       limpaModal();
     } catch (error) {
@@ -45,13 +45,13 @@ export default function NotaEditor({ mostrarNotas, notaSelecionada, setNotaSelec
     const umaNota = {
       titulo: titulo,
       categoria: categoria,
-      texto: texto,
+      descricao: descricao,
       id: notaSelecionada.id,
     };
     try {
-      await db.runAsync(`
-        UPDATE notas SET titulo = ?, categoria = ?, texto = ? WHERE id = ?
-      `, [umaNota.titulo, umaNota.categoria, umaNota.texto, umaNota.id]);
+      await db.runAsync(
+        ` UPDATE notas SET titulo = ?, categoria = ?, descricao = ? WHERE id = ?; `,
+        [umaNota.titulo, umaNota.categoria, umaNota.descricao, umaNota.id]);
       mostrarNotas();
       limpaModal();
     } catch (error) {
@@ -61,9 +61,9 @@ export default function NotaEditor({ mostrarNotas, notaSelecionada, setNotaSelec
 
   const deletarNota = async () => {
     try {
-      await db.runAsync(`
-        DELETE FROM notas WHERE id = ?
-      `, [notaSelecionada.id]);
+      await db.runAsync(
+        ` DELETE FROM notas WHERE id = ?; `,
+        [notaSelecionada.id]);
       mostrarNotas();
       limpaModal();
     } catch (error) {
@@ -74,7 +74,7 @@ export default function NotaEditor({ mostrarNotas, notaSelecionada, setNotaSelec
   const limpaModal = () => {
     setTitulo("");
     setCategoria("Pessoal");
-    setTexto("");
+    setDescricao("");
     setNotaSelecionada({});
     setModalVisivel(false);
   };
@@ -112,9 +112,9 @@ export default function NotaEditor({ mostrarNotas, notaSelecionada, setNotaSelec
                 style={estilos.modalInput}
                 multiline={true}
                 numberOfLines={3}
-                onChangeText={novoTexto => setTexto(novoTexto)}
+                onChangeText={novaDescricao => setDescricao(novaDescricao)}
                 placeholder="Digite aqui seu lembrete"
-                value={texto} />
+                value={descricao} />
               <View style={estilos.modalBotoes}>
                 <TouchableOpacity
                   style={estilos.modalBotaoSalvar}

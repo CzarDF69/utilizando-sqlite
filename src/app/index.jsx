@@ -13,16 +13,16 @@ export default function App() {
   const [notaSelecionada, setNotaSelecionada] = useState({});
   const [notas, setNotas] = useState([]);
   const [categoria, setCategoria] = useState("Todos");
-
+  
   useEffect(() => {
     mostrarNotas();
   }, []);
 
   const mostrarNotas = async () => {
+    setCategoria("Todos");
     try {
-      const todasNotas = await db.getAllAsync(` SELECT * FROM notas `);
+      const todasNotas = await db.getAllAsync(` SELECT * FROM notas; `);
       setNotas(todasNotas);
-      console.log(todasNotas);
     } catch (error) {
       console.error("Erro ao buscar notas:", error);
     };
@@ -34,7 +34,10 @@ export default function App() {
       await mostrarNotas();
     } else {
       try {
-        const todasNotas = await db.getAllAsync(` SELECT * FROM notas WHERE categoria = ? `, [categoriaSelecionada]);
+        const todasNotas = await db.getAllAsync(
+          ` SELECT * FROM notas WHERE categoria = ? ; `,
+          [categoriaSelecionada]
+        );
         setNotas(todasNotas);
       } catch (error) {
         console.error("Erro ao filtrar notas:", error);
@@ -45,15 +48,19 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <SafeAreaView style={estilos.container}>
-
         <FlatList
           data={notas}
           renderItem={(nota) => <Nota {...nota} setNotaSelecionada={setNotaSelecionada} />}
           keyExtractor={nota => nota.id}
           ListHeaderComponent={() => {
             return (
-              <View style={estilos.picker}>
-                <Picker selectedValue={categoria} onValueChange={(categoriaSelecionada) => filtrarLista(categoriaSelecionada)}>
+              <View style={estilos.pickerContainer}>
+                <Picker
+                  selectedValue={categoria}
+                  style={estilos.picker}
+                  itemStyle={estilos.pickerItem}
+                  onValueChange={(categoriaSelecionada) => filtrarLista(categoriaSelecionada)}
+                >
                   <Picker.Item label="Todos" value="Todos" />
                   <Picker.Item label="Pessoal" value="Pessoal" />
                   <Picker.Item label="Trabalho" value="Trabalho" />
@@ -75,10 +82,21 @@ const estilos = StyleSheet.create({
     alignItems: "stretch",
     justifyContent: "flex-start",
   },
-  picker: {
+  pickerContainer: {
     borderWidth: 1,
     borderRadius: 5,
     borderColor: "#EEEEEE",
     margin: 16,
-  }
+  },
+  picker: {
+    height: 32,
+    fontSize: 24,
+    width: '100%',
+    color: 'black', // Text color for selected item
+  },
+  pickerItem: { // iOS only
+    height: 32,
+    fontSize: 24,
+    color: 'blue',
+  },
 });

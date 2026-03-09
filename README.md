@@ -1,53 +1,40 @@
-# Welcome to your Expo app 👋
+# Utilizando SQLite
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Projeto React Native com Expo de persistência local de dados, com utilização do SQLite.
 
-## Get started
+Curso Alura: **`React Native: guardando informações localmente`**
 
-1. Install dependencies
+## 🔨 Funcionalidades do projeto
+
+- Salvar lembretes de afazeres diários
+- Persistências CRUD com SQLite
+
+## ✔️ Técnicas e tecnologias utilizadas
+
+O desenvolvimento do projeto envolveu o uso das seguintes tecnologias e técnicas:
+
+- **`React Native`**
+- **`Expo`**
+- **`SQLite`**
+
+## 🛠️ Abrir e rodar o projeto
+
+- Comandos `npx` e `npm`
 
    ```bash
-   npm install
+   npx create-expo-app utilizando-sqlite
+   npm run reset-project
    npm i @react-native-picker/picker
-   npm install @react-navigation/native @react-navigation/stack
-   npx expo install expo-sqlite
-   ```
-
-2. Start the app
-
-   ```bash
+   npm i @react-navigation/native @react-navigation/stack
+   npx expo i expo-sqlite
    npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+## 📚 Mais informações
+
+Este é um projeto [Expo](https://expo.dev) criado com [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
 - [development build](https://docs.expo.dev/develop/development-builds/introduction/)
 - [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
 - [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
 - [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.

@@ -9,7 +9,7 @@ export function Nota({item, setNotaSelecionada}) {
     <TouchableOpacity style={estilos.cartao} onPress={() => setNotaSelecionada(item)}>
       <Text style={estilos.titulo}>{item.titulo}</Text>
       <Text style={estilos.categoria}>{item.categoria}</Text>
-      <Text style={estilos.texto} numberOfLines={5}>{item.texto}</Text>
+      <Text style={estilos.descricao} numberOfLines={5}>{item.descricao}</Text>
     </TouchableOpacity>
   )
 }
@@ -45,7 +45,7 @@ const styleFunction = (cor) => StyleSheet.create({
     color: "#FAFAFA",
     alignSelf: "flex-start",
   },
-  texto: {
+  descricao: {
     lineHeight: 28,
   }
 })
