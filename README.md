@@ -11,15 +11,14 @@ Curso Alura: **`React Native: guardando informações localmente`**
 
 ## ✔️ Técnicas e tecnologias utilizadas
 
-O desenvolvimento do projeto envolveu o uso das seguintes tecnologias e técnicas:
+O desenvolvimento do projeto envolveu o uso das seguintes tecnologias:
 
-- **`React Native`**
-- **`Expo`**
-- **`SQLite`**
+- **`React 19.1.0`**
+- **`React Native 0.81.5`**
+- **`Expo 54.0.33`**
+- **`SQLite 16.0.10`**
 
-## 🛠️ Abrir e rodar o projeto
-
-- Comandos `npx` e `npm`
+## 🛠️ Comandos para criar e rodar o projeto
 
    ```bash
    npx create-expo-app utilizando-sqlite
@@ -27,14 +26,13 @@ O desenvolvimento do projeto envolveu o uso das seguintes tecnologias e técnica
    npm i @react-native-picker/picker
    npm i @react-navigation/native @react-navigation/stack
    npx expo i expo-sqlite
-   npx expo start
+   npm run start
    ```
 
 ## 📚 Mais informações
 
-Este é um projeto [Expo](https://expo.dev) criado com [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
+- [React Native](https://reactnative.dev/)
+- [Expo Go](https://expo.dev/go)
 - [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
 - [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
